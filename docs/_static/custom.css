@@ -1,0 +1,19 @@
+table {
+    color: var(--color-foreground-primary) !important;
+}
+
+table thead {
+    background-color: var(--color-card-marginals-background) !important;
+}
+
+table tr:nth-child(odd) {
+    background: var(--color-background-border) !important;
+}
+
+table tr:nth-child(even) {
+    background: var(--color-card-marginals-background) !important;
+}
+
+div.nboutput.container div.output_area.stderr {
+    background: var(--color-background-primary) !important;
+}

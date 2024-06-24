@@ -1,8 +1,12 @@
+from typing import Union
+
 from pydicer.input.web import WebInput
 
 
 class TestInput(WebInput):
-    def __init__(self, working_directory=None):
+    __test__ = False  # pytest will try to use this as a test class without this
+
+    def __init__(self, working_directory: Union[str, list] = None):
         """
         A test input class to download example data from zenodo
 
@@ -10,5 +14,7 @@ class TestInput(WebInput):
             working_directory (str|pathlib.Path, optional): The working directory in which to
             store the data fetched. Defaults to a temp directory.
         """
-        super().__init__(working_directory)
-        self.data_url = "https://zenodo.org/record/5276878/files/HNSCC.zip"
+
+        data_url = "https://zenodo.org/record/5276878/files/HNSCC.zip"
+
+        super().__init__(data_url, working_directory)

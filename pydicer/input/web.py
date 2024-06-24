@@ -1,29 +1,15 @@
-import zipfile
-import urllib.request
-import tempfile
-
+import logging
 from pathlib import Path
+from typing import Union
 
 from pydicer.input.base import InputBase
+from pydicer.utils import download_and_extract_zip_file
 
-
-def download_and_extract_zip_file(zip_url, output_directory):
-
-    with tempfile.TemporaryDirectory() as temp_dir:
-        temp_file = Path(temp_dir).joinpath("tmp.zip")
-
-        with urllib.request.urlopen(zip_url) as dl_file:
-
-            with open(temp_file, "wb") as out_file:
-
-                out_file.write(dl_file.read())
-
-        with zipfile.ZipFile(temp_file, "r") as zip_ref:
-            zip_ref.extractall(output_directory)
+logger = logging.getLogger(__name__)
 
 
 class WebInput(InputBase):
-    def __init__(self, data_url, working_directory=None):
+    def __init__(self, data_url: str, working_directory: Union[str, Path] = None):
         """
         Class for downloading and saving input data off the internet
 
@@ -37,4 +23,12 @@ class WebInput(InputBase):
         self.data_url = data_url
 
     def fetch_data(self):
+        """Download the data."""
+
+        files_in_directory = list(self.working_directory.glob("*"))
+        if len(files_in_directory) > 0:
+            logger.warning("Directory not empty, won't download files")
+            return
+
+        logger.info("Downloading files from %s", self.data_url)
         download_and_extract_zip_file(self.data_url, self.working_directory)
